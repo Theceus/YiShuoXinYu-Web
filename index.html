@@ -600,7 +600,7 @@
             </div>
             <div class="search-input">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="输入关键词，实时检索语录...">
+                <input type="text" placeholder="输入关键词以检索语录...">
                 <!-- 搜索框功能 -->
             </div>
             
@@ -697,7 +697,7 @@
 				if (quotesToRender.length === 0) {
 					const noResults = document.createElement('p');
 					noResults.className = 'no-results';
-					noResults.textContent = '<span style="color: red;">啊哦，没有找到哦</span>';
+					noResults.textContent = '啊哦，没有找到哦...（；´д｀）ゞ';
 					quotesContainer.appendChild(noResults);
 					return;
 				}
@@ -718,7 +718,7 @@
 				if (quotesToRender.length === 0) {
 					const noResults = document.createElement('p');
 					noResults.className = 'no-results';
-					noResults.textContent = '<span style="color: red;">啊哦，没有找到哦</span>';
+					noResults.textContent = '啊哦，没有找到哦...（；´д｀）ゞ';
 					quotesContainer.appendChild(noResults);
 					return;
 				}
