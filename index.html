@@ -7,660 +7,525 @@
 	<link rel="icon" href="https://pic1.imgdb.cn/item/68141ce958cb8da5c8d64934.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --dark-bg: #121212;
-            --dark-section: #1e1e1e;
-            --accent-color: #00b084;
-            --secondary-color: #2196f3;
-            --text-color: #f5f5f5;
-            --muted-color: #b0b0b0;
-        }
-        
-        /* 加载动画样式 */
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, #010032, #002f32);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 1s ease-in-out;
-        }
-		
-        .loader-item {
-            width: 12px;
-            height: 60px;
-            margin: 0 2px;
-            background-color: #fff;
-            animation: wave 1.2s infinite ease-in-out;
-            animation-delay: var(--delay);
-        }
-		
-        @keyframes wave {
-            0%,
-            40%,
-            100% {
-                transform: scale(0.4);
-            }
-            20% {
-                transform: scale(1);
-            }
-        }
+		/* 原有样式保持不变 */
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
 
-        /* 原有样式保持不变 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(34, 193, 195, 0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
-            opacity: 0.3;
-            z-index: -1;
-        }
-        
-        header {
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 2rem 0;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-            border-radius: 0 0 20px 20px;
-        }
-        
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .profile-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 3rem 0;
-            text-align: center;
-            position: relative;
-            padding: 2rem;
-            background-color: var(--dark-section);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .profile-section::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(33, 150, 243, 0.2) 0%, rgba(33, 150, 243, 0) 70%);
-            z-index: -1;
-            animation: floating 8s ease-in-out infinite;
-        }
-        
-        @keyframes floating {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(20px, -20px); }
-        }
-        
-        .profile-pic-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            margin-bottom: 3rem;
-            perspective: 1000px;
-        }
-        
-        .profile-pic-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .profile-pic-wrapper:hover {
-            transform: rotateY(180deg);
-        }
-        
-        .profile-pic-front, .profile-pic-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid var(--secondary-color);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        .profile-pic-back {
-            transform: rotateY(180deg);
-            background-color: var(--dark-section);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 2rem;
-            box-sizing: border-box;
-        }
-        
-        .profile-pic-back h3 {
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-        
-        .profile-pic-back p {
-            font-size: 0.9rem;
-            color: var(--muted-color);
-            text-align: center;
-        }
-        
-        .profile-info {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--accent-color);
-            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            display: inline-block;
-        }
-        
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
-        }
-        
-        .subtitle {
-            font-size: 1.5rem;
-            color: var(--secondary-color);
-            margin-bottom: 2rem;
-        }
-        
-        .tagline {
-            font-style: italic;
-            color: var(--muted-color);
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-        
-        .search-section {
-            background-color: var(--dark-section);
-            padding: 2rem;
-            margin: 3rem 0;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .search-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(33, 150, 243, 0.05) 25%, transparent 25%, transparent 50%, rgba(33, 150, 243, 0.05) 50%, rgba(33, 150, 243, 0.05) 75%, transparent 75%, transparent);
-            background-size: 20px 20px;
-            opacity: 0.3;
-            border-radius: 20px;
-        }
-        
-        .search-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .search-input {
-            display: flex;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-        
-        .search-input input {
-            flex: 1;
-            padding: 1rem 1.5rem;
-            padding-left: 2.5rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            background-color: #333;
-            color: var(--text-color);
-            transition: all 0.3s;
-        }
-        
-        .search-input input:focus {
-            box-shadow: 0 0 0 2px var(--secondary-color);
-            outline: none;
-            background-color: #444;
-        }
-        
-        .search-input input::placeholder {
-            color: var(--muted-color);
-        }
-        
-        .search-input i {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--muted-color);
-            transition: color 0.3s;
-        }
-        
-        .search-input input:focus + i {
-            color: var(--secondary-color);
-        }
-        
-        .search-input button {
-            padding: 1rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            background-color: var(--accent-color);
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            margin-left: 0.5rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .search-input button:hover {
-            background-color: #0099b8;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-        
-        .search-input button:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .search-input button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: all 0.3s;
-        }
-        
-        .search-input button:hover::before {
-            left: 100%;
-        }
-        
-        .quote-categories {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            justify-content: center;
-        }
-        
-        .category {
+		:root {
+			--dark-bg: #121212;
+			--dark-section: #1e1e1e;
+			--accent-color: #00b084;
+			--secondary-color: #2196f3;
+			--text-color: #f5f5f5;
+			--muted-color: #b0b0b0;
+		}
+
+		body {
+			background-color: var(--dark-bg);
+			color: var(--text-color);
+			line-height: 1.6;
+			overflow-x: hidden;
+		}
+
+		body::before {
+			content: '';
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: radial-gradient(circle, rgba(34, 193, 195, 0.1) 1px, transparent 1px);
+			background-size: 20px 20px;
+			opacity: 0.3;
+			z-index: -1;
+		}
+
+		/* 加载动画样式 */
+		#loader {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(to right, #010032, #002f32);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 9999;
+			transition: opacity 1s ease-in-out;
+		}
+
+		.loader-item {
+			width: 12px;
+			height: 60px;
+			margin: 0 2px;
+			background-color: #fff;
+			animation: wave 1.2s infinite ease-in-out;
+			animation-delay: var(--delay);
+		}
+
+		@keyframes wave {
+			0%, 40%, 100% {
+				transform: scale(0.4);
+			}
+			20% {
+				transform: scale(1);
+			}
+		}
+
+		header {
+			background-color: rgba(0, 0, 0, 0.8);
+			padding: 2rem 0;
+			text-align: center;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			position: relative;
+			overflow: hidden;
+			border-radius: 0 0 20px 20px;
+		}
+
+		header::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			height: 2px;
+			background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 2rem;
+		}
+
+		.profile-section {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin: 3rem 0;
+			text-align: center;
+			position: relative;
+			padding: 2rem;
+			background-color: var(--dark-section);
+			border-radius: 20px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+		}
+
+		.profile-section::before {
+			content: '';
+			position: absolute;
+			top: -50px;
+			left: -50px;
+			width: 200px;
+			height: 200px;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(33, 150, 243, 0.2) 0%, rgba(33, 150, 243, 0) 70%);
+			z-index: -1;
+			animation: floating 8s ease-in-out infinite;
+		}
+
+		@keyframes floating {
+			0%, 100% { transform: translate(0, 0); }
+			50% { transform: translate(20px, -20px); }
+		}
+
+		.profile-pic-container {
+			position: relative;
+			width: 300px;
+			height: 300px;
+			margin-bottom: 3rem;
+			perspective: 1000px;
+		}
+
+		.profile-pic-wrapper {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			transform-style: preserve-3d;
+			transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		}
+
+		.profile-pic-wrapper:hover {
+			transform: rotateY(180deg);
+		}
+
+		.profile-pic-front, .profile-pic-back {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			backface-visibility: hidden;
+			border-radius: 50%;
+			overflow: hidden;
+			border: 4px solid var(--secondary-color);
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+		}
+
+		.profile-pic-back {
+			transform: rotateY(180deg);
+			background-color: var(--dark-section);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			padding: 2rem;
+			box-sizing: border-box;
+		}
+
+		.profile-pic-back h3 {
+			color: var(--accent-color);
+			margin-bottom: 1rem;
+		}
+
+		.profile-pic-back p {
+			font-size: 0.9rem;
+			color: var(--muted-color);
+			text-align: center;
+		}
+
+		.profile-info {
+			max-width: 700px;
+			margin: 0 auto;
+		}
+
+		h1 {
+			font-size: 3rem;
+			margin-bottom: 1rem;
+			color: var(--accent-color);
+			background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			position: relative;
+			display: inline-block;
+		}
+
+		h1::after {
+			content: '';
+			position: absolute;
+			bottom: -5px;
+			left: 0;
+			width: 100%;
+			height: 3px;
+			background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+		}
+
+		.subtitle {
+			font-size: 1.5rem;
+			color: var(--secondary-color);
+			margin-bottom: 2rem;
+		}
+
+		.tagline {
+			font-style: italic;
+			color: var(--muted-color);
+			margin-bottom: 2rem;
+			font-size: 1.1rem;
+		}
+
+		.search-section {
+			background-color: var(--dark-section);
+			padding: 2rem;
+			margin: 3rem 0;
+			border-radius: 20px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.search-section::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(45deg, rgba(33, 150, 243, 0.05) 25%, transparent 25%, transparent 50%, rgba(33, 150, 243, 0.05) 50%, rgba(33, 150, 243, 0.05) 75%, transparent 75%, transparent);
+			background-size: 20px 20px;
+			opacity: 0.3;
+			border-radius: 20px;
+		}
+
+		.search-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 1.5rem;
+		}
+
+		.search-input {
+			display: flex;
+			margin-bottom: 1.5rem;
+			position: relative;
+		}
+
+		.search-input input {
+			flex: 1;
+			padding: 1rem 1.5rem;
+			padding-left: 2.5rem;
+			border: none;
+			border-radius: 5px;
+			font-size: 1rem;
+			background-color: #333;
+			color: var(--text-color);
+			transition: all 0.3s;
+		}
+
+		.search-input input:focus {
+			box-shadow: 0 0 0 2px var(--secondary-color);
+			outline: none;
+			background-color: #444;
+		}
+
+		.search-input input::placeholder {
+			color: var(--muted-color);
+		}
+
+		.search-input i {
+			position: absolute;
+			left: 1rem;
+			top: 50%;
+			transform: translateY(-50%);
+			color: var(--muted-color);
+			transition: color 0.3s;
+		}
+
+		.search-input input:focus + i {
+			color: var(--secondary-color);
+		}
+
+		.quote-categories {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1rem;
+			margin-bottom: 2rem;
+			justify-content: center;
+		}
+
+		.category {
 			max-width: 100%;
-            padding: 0.5rem 1.2rem;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-            border: none;
-        }
-        
-        .category::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: all 0.5s;
-        }
-        
-        .category:hover::before {
-            left: 100%;
-        }
-        
-        .category.active, .category:hover {
-            background-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(255, 87, 34, 0.3);
-        }
-        
-        .category:active {
-            transform: scale(0.98);
-        }
-        
-        .quote-container {
-            margin-top: 2rem;
-            overflow-y: hidden;
-            position: relative;
-        }
-        
-        .quote-card {
-            background-color: rgba(30, 30, 30, 0.8);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border-left: 4px solid transparent;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        
-        .quote-card.visible {
-            transform: translateY(0);
-            opacity: 1;
-            transition-delay: 0.1s;
-        }
-        
-        .quote-card::before {
-            content: '\201C';
-            font-size: 5rem;
-            position: absolute;
-            top: -2rem;
-            left: -1rem;
-            color: rgba(33, 150, 243, 0.1);
-            font-family: Georgia, serif;
-            opacity: 0;
-            transition: all 0.3s;
-        }
-        
-        .quote-card.visible::before {
-            opacity: 1;
-        }
-        
-        .quote-card::after {
-            content: '\201D';
-            font-size: 5rem;
-            position: absolute;
-            bottom: -4rem;
-            right: -1rem;
-            color: rgba(255, 87, 34, 0.1);
-            font-family: Georgia, serif;
-            opacity: 0;
-            transition: all 0.3s;
-        }
-        
-        .quote-card.visible::after {
-            opacity: 1;
-        }
-        
-        .quote-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border-left-color: var(--secondary-color);
-        }
-        
-        .quote-text {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: var(--text-color);
-            position: relative;
-            z-index: 1;
-            opacity: 0;
-            transition: all 0.3s;
-        }
-        
-        .quote-card.visible .quote-text {
-            opacity: 1;
-            transition-delay: 0.2s;
-        }
-        
-        .quote-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s;
-        }
-        
-        .quote-card.visible .quote-tags {
-            opacity: 1;
-            transform: translateY(0);
-            transition-delay: 0.3s;
-        }
-        
-        .quote-tag {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            transition: all 0.3s;
-        }
-        
-        .quote-tag:hover {
-            background-color: var(--secondary-color);
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 0.5rem;
-            perspective: 1000px;
-        }
-        
-        .page-item {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        
-        .page-item:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px) rotateY(5deg);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-        }
-        
-        .page-item.active {
-            background-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(255, 87, 34, 0.3);
-            transform: translateY(-3px);
-        }
-        
-        .page-item:active {
-            transform: translateY(1px) rotateY(1deg);
-        }
-        
-        .page-item i {
-            transition: transform 0.3s;
-        }
-        
-        .page-item:hover i {
-            transform: scale(1.2);
-        }
-        
-        footer {
-            text-align: center;
-            padding: 3rem 0;
-            margin-top: 3rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            border-radius: 20px 20px 0 0;
-        }
-        
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
-        }
-        
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .social-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--secondary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .social-icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: all 0.5s;
-        }
-        
-        .social-icon:hover::before {
-            left: 100%;
-        }
-        
-        .social-icon:hover {
-            transform: translateY(-5px) rotate(5deg);
-            background-color: var(--accent-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .social-icon i {
-            font-size: 1.5rem;
-            transition: transform 0.3s;
-        }
-        
-        .social-icon:hover i {
-            transform: scale(1.3);
-        }
-        
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .profile-pic-container {
-                width: 250px;
-                height: 250px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .quote-text {
-                font-size: 1rem;
-            }
-        }
+			padding: 0.5rem 1.2rem;
+			background-color: rgba(255, 255, 255, 0.1);
+			color: var(--text-color);
+			border-radius: 25px;
+			cursor: pointer;
+			transition: all 0.3s;
+			font-weight: 500;
+			position: relative;
+			overflow: hidden;
+			border: none;
+		}
+
+		.category::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+			transition: all 0.5s;
+		}
+
+		.category:hover::before {
+			left: 100%;
+		}
+
+		.category.active, .category:hover {
+			background-color: var(--accent-color);
+			box-shadow: 0 0 15px rgba(255, 87, 34, 0.3);
+		}
+
+		.category:active {
+			transform: scale(0.98);
+		}
+
+		.quote-container {
+			margin-top: 2rem;
+			overflow-y: hidden;
+			position: relative;
+		}
+
+		.quote-card {
+			background-color: rgba(30, 30, 30, 0.8);
+			padding: 1.5rem;
+			margin-bottom: 1.5rem;
+			border-radius: 12px;
+			transition: all 0.3s ease;
+			position: relative;
+			overflow: hidden;
+			border-left: 4px solid transparent;
+			opacity: 0;
+			transform: translateY(30px);
+		}
+
+		.quote-card.visible {
+			transform: translateY(0);
+			opacity: 1;
+			transition-delay: 0.1s;
+		}
+
+		.quote-card::before {
+			content: '\201C';
+			font-size: 5rem;
+			position: absolute;
+			top: -2rem;
+			left: -1rem;
+			color: rgba(33, 150, 243, 0.1);
+			font-family: Georgia, serif;
+			opacity: 0;
+			transition: all 0.3s;
+		}
+
+		.quote-card.visible::before {
+			opacity: 1;
+		}
+
+		.quote-card::after {
+			content: '\201D';
+			font-size: 5rem;
+			position: absolute;
+			bottom: -4rem;
+			right: -1rem;
+			color: rgba(255, 87, 34, 0.1);
+			font-family: Georgia, serif;
+			opacity: 0;
+			transition: all 0.3s;
+		}
+
+		.quote-card.visible::after {
+			opacity: 1;
+		}
+
+		.quote-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+			border-left-color: var(--secondary-color);
+		}
+
+		.quote-text {
+			font-size: 1.2rem;
+			margin-bottom: 1rem;
+			color: var(--text-color);
+			position: relative;
+			z-index: 1;
+			opacity: 0;
+			transition: all 0.3s;
+		}
+
+		.quote-card.visible .quote-text {
+			opacity: 1;
+			transition-delay: 0.2s;
+		}
+
+		.quote-tags {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			margin-top: 0.5rem;
+			opacity: 0;
+			transform: translateY(10px);
+			transition: all 0.3s;
+		}
+
+		.quote-card.visible .quote-tags {
+			opacity: 1;
+			transform: translateY(0);
+			transition-delay: 0.3s;
+		}
+
+		.quote-tag {
+			background-color: rgba(255, 255, 255, 0.1);
+			padding: 0.2rem 0.5rem;
+			border-radius: 4px;
+			font-size: 0.8rem;
+			transition: all 0.3s;
+		}
+
+		.quote-tag:hover {
+			background-color: var(--secondary-color);
+		}
+
+		/* 分页按钮样式 */
+		.pagination {
+			display: flex;
+			justify-content: center;
+			margin-top: 2rem;
+			gap: 0.5rem;
+			perspective: 1000px;
+		}
+
+		#pagination-container {
+			display: flex;
+			align-items: center;
+		}
+
+		.page-item {
+			margin: 0 5px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			background-color: rgba(255, 255, 255, 0.1);
+			color: var(--text-color);
+			cursor: pointer;
+			transition: all 0.3s;
+		}
+
+		.page-item.active {
+			background-color: var(--accent-color);
+			color: white;
+			border-radius: 5px;
+			width: auto;
+			min-width: 80px;
+		}
+
+		.page-item:hover:not(.active) {
+			background-color: rgba(255, 255, 255, 0.2);
+		}
+
+		.page-item:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+
+		.page-item i {
+			font-size: 16px;
+		}
+
+		/* 响应式设计 */
+		@media (max-width: 768px) {
+			.profile-pic-container {
+				width: 250px;
+				height: 250px;
+			}
+			
+			h1 {
+				font-size: 2rem;
+			}
+			
+			.subtitle {
+				font-size: 1.2rem;
+			}
+			
+			.quote-text {
+				font-size: 1rem;
+			}
+			
+			#pagination-container {
+				flex-direction: column;
+				align-items: center;
+			}
+			
+			.page-item {
+				margin: 5px 0;
+			}
+		}
     </style>
 </head>
 <body>
@@ -727,7 +592,18 @@
             </div>
             
             <div class="pagination">
-                <!-- 分页按钮将通过JavaScript动态生成 -->
+                <div id="pagination-container">
+                    <!-- 上一页按钮 -->
+                    <div class="page-item prev-page">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                    <!-- 当前页码显示 -->
+                    <div class="page-item current-page active"></div>
+                    <!-- 下一页按钮 -->
+                    <div class="page-item next-page">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -764,8 +640,88 @@
 			// 更新语录数量显示
 			document.getElementById('quote-count').textContent = `共 ${quotes.length} 条语录`;
 			
-			// 初始化页面
-			renderQuotes(quotes);
+			// 初始化分页变量
+			const quotesPerPage = 10;
+			let currentPage = 1;
+			let totalPages = Math.ceil(quotes.length / quotesPerPage);
+			
+			// 更新分页按钮状态
+			function updatePagination() {
+				const prevButton = document.querySelector('.prev-page');
+				const nextButton = document.querySelector('.next-page');
+				const currentPageElement = document.querySelector('.current-page');
+				
+				// 更新当前页码显示
+				currentPageElement.textContent = `${currentPage} / ${totalPages}`;
+				
+				// 禁用/启用翻页按钮
+				prevButton.style.opacity = currentPage === 1 ? '0.5' : '1';
+				prevButton.style.cursor = currentPage === 1 ? 'default' : 'pointer';
+				
+				nextButton.style.opacity = currentPage === totalPages ? '0.5' : '1';
+				nextButton.style.cursor = currentPage === totalPages ? 'default' : 'pointer';
+			}
+			
+			// 渲染语录卡片
+			function renderQuotes(quotesToRender) {
+				const quotesContainer = document.querySelector('.quote-container');
+				quotesContainer.innerHTML = '';
+				
+				if (quotesToRender.length === 0) {
+					const noResults = document.createElement('p');
+					noResults.className = 'no-results';
+					noResults.textContent = '没有找到匹配的语录';
+					quotesContainer.appendChild(noResults);
+					return;
+				}
+				
+				// 初始化分页
+				currentPage = 1;
+				totalPages = Math.ceil(quotesToRender.length / quotesPerPage);
+				
+				// 渲染第一页
+				renderPage(quotesToRender, currentPage);
+			}
+			
+			// 渲染特定页面的语录
+			function renderPage(quotesToRender, page) {
+				const quotesContainer = document.querySelector('.quote-container');
+				quotesContainer.innerHTML = '';
+				
+				if (quotesToRender.length === 0) {
+					const noResults = document.createElement('p');
+					noResults.className = 'no-results';
+					noResults.textContent = '没有找到匹配的语录';
+					quotesContainer.appendChild(noResults);
+					return;
+				}
+				
+				const startIndex = (page - 1) * quotesPerPage;
+				const endIndex = Math.min(startIndex + quotesPerPage, quotesToRender.length);
+				const currentQuotes = quotesToRender.slice(startIndex, endIndex);
+				
+				currentQuotes.forEach((quote, index) => {
+					const quoteCard = document.createElement('div');
+					quoteCard.className = 'quote-card';
+					quoteCard.style.animationDelay = `${index * 0.1}s`;
+					quoteCard.innerHTML = `
+						<p class="quote-text">${quote.text}</p>
+						<div class="quote-tags">
+							${quote.tags.map(tag => `<span class="quote-tag">${tag}</span>`).join('')}
+						</div>
+					`;
+					
+					quotesContainer.appendChild(quoteCard);
+					
+					// 延迟添加可见类以实现淡入效果
+					setTimeout(() => {
+						quoteCard.classList.add('visible');
+					}, 100);
+				});
+				
+				currentPage = page;
+				updatePagination();
+			}
 			
 			// 分类点击事件
 			document.querySelectorAll('.category').forEach(category => {
@@ -775,8 +731,8 @@
 					
 					const categoryName = this.textContent;
 					if (categoryName === '全部') {
-						renderQuotes(quotes);
 						document.getElementById('quote-count').textContent = `共 ${quotes.length} 条语录`;
+						renderQuotes(quotes);
 					} else {
 						const filteredQuotes = quotes.filter(quote => 
 							quote.tags.includes(categoryName) || 
@@ -788,7 +744,7 @@
 				});
 			});
 			
-			// 搜索框实时检索
+			// 搜索和实时检索
 			const searchInput = document.querySelector('.search-input input');
 			let debounceTimer;
 			
@@ -814,83 +770,26 @@
 					renderQuotes(filteredQuotes);
 				}, 300);
 			});
+			
+			// 上一页点击事件
+			document.querySelector('.prev-page').addEventListener('click', () => {
+				if (currentPage > 1) {
+					currentPage--;
+					renderPage(quotes, currentPage);
+				}
+			});
+			
+			// 下一页点击事件
+			document.querySelector('.next-page').addEventListener('click', () => {
+				if (currentPage < totalPages) {
+					currentPage++;
+					renderPage(quotes, currentPage);
+				}
+			});
+			
+			// 初始化页面
+			renderQuotes(quotes);
 		});
-		
-        // 渲染语录卡片
-        function renderQuotes(quotesToRender) {
-            const quotesContainer = document.querySelector('.quote-container');
-            const pagination = document.querySelector('.pagination');
-            
-            quotesContainer.innerHTML = '';
-            pagination.innerHTML = '';
-            
-            if (quotesToRender.length === 0) {
-                const noResults = document.createElement('p');
-                noResults.className = 'no-results';
-                noResults.textContent = '没有找到匹配的语录';
-                quotesContainer.appendChild(noResults);
-                return;
-            }
-            
-            // 分页设置
-            const quotesPerPage = 10;
-            const totalPages = Math.ceil(quotesToRender.length / quotesPerPage);
-            
-            // 添加分页按钮
-            for (let i = 1; i <= totalPages; i++) {
-                const pageItem = document.createElement('div');
-                pageItem.className = `page-item ${i === 1 ? 'active' : ''}`;
-                if (i === 1) {
-                    pageItem.innerHTML = '<i class="fas fa-home"></i>';
-                } else if (i === totalPages) {
-                    pageItem.innerHTML = '<i class="fas fa-flag"></i>';
-                } else {
-                    pageItem.textContent = i;
-                }
-                
-                pageItem.addEventListener('click', function() {
-                    document.querySelector('.page-item.active').classList.remove('active');
-                    this.classList.add('active');
-                    renderPage(quotesToRender, i);
-                });
-                
-                pagination.appendChild(pageItem);
-            }
-            
-            // 渲染第一页
-            renderPage(quotesToRender, 1);
-        }
-        
-        // 渲染特定页面的语录
-        function renderPage(quotesToRender, page) {
-            const quotesContainer = document.querySelector('.quote-container');
-            quotesContainer.innerHTML = '';
-            
-            const quotesPerPage = 10;
-            const startIndex = (page - 1) * quotesPerPage;
-            const endIndex = Math.min(startIndex + quotesPerPage, quotesToRender.length);
-            const currentQuotes = quotesToRender.slice(startIndex, endIndex);
-            
-            // 添加语录卡片
-            currentQuotes.forEach((quote, index) => {
-                const quoteCard = document.createElement('div');
-                quoteCard.className = 'quote-card';
-                quoteCard.style.animationDelay = `${index * 0.1}s`;
-                quoteCard.innerHTML = `
-                    <p class="quote-text">${quote.text}</p>
-                    <div class="quote-tags">
-                        ${quote.tags.map(tag => `<span class="quote-tag">${tag}</span>`).join('')}
-                    </div>
-                `;
-                
-                quotesContainer.appendChild(quoteCard);
-                
-                // 延迟添加可见类以实现淡入效果
-                setTimeout(() => {
-                    quoteCard.classList.add('visible');
-                }, 100);
-            });
-        }
         
         // 王轶群老师语录数据
         const quotes = [
