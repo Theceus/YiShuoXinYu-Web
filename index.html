@@ -7,7 +7,6 @@
 	<link rel="icon" href="https://pic1.imgdb.cn/item/68141ce958cb8da5c8d64934.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-		/* 原有样式保持不变 */
 		* {
 			margin: 0;
 			padding: 0;
@@ -669,7 +668,7 @@
 			document.getElementById('quote-count').textContent = `共 ${quotes.length} 条语录`;
 			
 			// 初始化分页变量
-			const quotesPerPage = 10;
+			const quotesPerPage = 5;
 			let currentPage = 1;
 			let totalPages = Math.ceil(quotes.length / quotesPerPage);
 			
@@ -698,7 +697,7 @@
 				if (quotesToRender.length === 0) {
 					const noResults = document.createElement('p');
 					noResults.className = 'no-results';
-					noResults.textContent = '没有找到匹配的语录';
+					noResults.textContent = '<span style="color: red;">啊哦，没有找到哦</span>';
 					quotesContainer.appendChild(noResults);
 					return;
 				}
@@ -719,7 +718,7 @@
 				if (quotesToRender.length === 0) {
 					const noResults = document.createElement('p');
 					noResults.className = 'no-results';
-					noResults.textContent = '没有找到匹配的语录';
+					noResults.textContent = '<span style="color: red;">啊哦，没有找到哦</span>';
 					quotesContainer.appendChild(noResults);
 					return;
 				}
