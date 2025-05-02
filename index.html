@@ -708,8 +708,8 @@
             </div>
             <div class="search-input">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="输入关键词，回车搜索语录...">
-                <button>搜索</button>
+                <input type="text" placeholder="输入关键词，实时检索语录...">
+                <!-- 搜索框功能 -->
             </div>
             
             <div class="quote-categories">
@@ -741,82 +741,81 @@
     </footer>
     
     <script>
-        // 页面加载完成后隐藏加载动画
-        document.addEventListener('DOMContentLoaded', function() {
-            // 隐藏加载动画
-            window.addEventListener('load', function() {
-                const loader = document.getElementById('loader');
-                loader.style.opacity = '0';
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 1000); // 1秒后完全隐藏
-            });
-            
-            // 显示元素
-            setTimeout(() => {
-                document.querySelectorAll('.fade-in').forEach((el, index) => {
-                    setTimeout(() => {
-                        el.classList.add('visible');
-                    }, index * 200);
-                });
-            }, 300);
-            
-            // 更新语录数量显示
-            document.getElementById('quote-count').textContent = `共 ${quotes.length} 条语录`;
-            
-            // 初始化页面
-            renderQuotes(quotes);
-            
-            // 分类点击事件
-            document.querySelectorAll('.category').forEach(category => {
-                category.addEventListener('click', function() {
-                    document.querySelector('.category.active').classList.remove('active');
-                    this.classList.add('active');
-                    
-                    const categoryName = this.textContent;
-                    if (categoryName === '全部') {
-                        renderQuotes(quotes);
-                        document.getElementById('quote-count').textContent = `共 ${quotes.length} 条语录`;
-                    } else {
-                        const filteredQuotes = quotes.filter(quote => 
-                            quote.tags.includes(categoryName) || 
-                            quote.category === categoryName
-                        );
-                        document.getElementById('quote-count').textContent = `共 ${filteredQuotes.length} 条语录`;
-                        renderQuotes(filteredQuotes);
-                    }
-                });
-            });
-            
-            // 搜索栏功能
-            document.querySelector('.search-input button').addEventListener('click', function() {
-                const searchTerm = document.querySelector('.search-input input').value.toLowerCase();
-                const quoteCount = document.getElementById('quote-count');
-                
-                if (searchTerm === '') {
-                    quoteCount.textContent = `共 ${quotes.length} 条语录`;
-                    renderQuotes(quotes);
-                    return;
-                }
-                
-                const filteredQuotes = quotes.filter(quote => 
-                    quote.text.toLowerCase().includes(searchTerm) || 
-                    quote.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
-                    quote.category.toLowerCase().includes(searchTerm)
-                );
-                
-                quoteCount.textContent = `共 ${filteredQuotes.length} 条结果`;
-                renderQuotes(filteredQuotes);
-            });
-            
-            // 回车搜索
-            document.querySelector('.search-input input').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    document.querySelector('.search-input button').click();
-                }
-            });
-        });
-        
+		// 页面加载完成后隐藏加载动画
+		document.addEventListener('DOMContentLoaded', function() {
+			// 隐藏加载动画
+			window.addEventListener('load', function() {
+				const loader = document.getElementById('loader');
+				loader.style.opacity = '0';
+				setTimeout(() => {
+					loader.style.display = 'none';
+				}, 1000); // 1秒后完全隐藏
+			});
+			
+			// 显示元素
+			setTimeout(() => {
+				document.querySelectorAll('.fade-in').forEach((el, index) => {
+					setTimeout(() => {
+						el.classList.add('visible');
+					}, index * 200);
+				});
+			}, 300);
+			
+			// 更新语录数量显示
+			document.getElementById('quote-count').textContent = `共 ${quotes.length} 条语录`;
+			
+			// 初始化页面
+			renderQuotes(quotes);
+			
+			// 分类点击事件
+			document.querySelectorAll('.category').forEach(category => {
+				category.addEventListener('click', function() {
+					document.querySelector('.category.active').classList.remove('active');
+					this.classList.add('active');
+					
+					const categoryName = this.textContent;
+					if (categoryName === '全部') {
+						renderQuotes(quotes);
+						document.getElementById('quote-count').textContent = `共 ${quotes.length} 条语录`;
+					} else {
+						const filteredQuotes = quotes.filter(quote => 
+							quote.tags.includes(categoryName) || 
+							quote.category === categoryName
+						);
+						document.getElementById('quote-count').textContent = `共 ${filteredQuotes.length} 条语录`;
+						renderQuotes(filteredQuotes);
+					}
+				});
+			});
+			
+			// 搜索框实时检索
+			const searchInput = document.querySelector('.search-input input');
+			let debounceTimer;
+			
+			searchInput.addEventListener('input', function() {
+				clearTimeout(debounceTimer);
+				debounceTimer = setTimeout(() => {
+					const searchTerm = searchInput.value.toLowerCase();
+					const quoteCount = document.getElementById('quote-count');
+					
+					if (searchTerm === '') {
+						quoteCount.textContent = `共 ${quotes.length} 条语录`;
+						renderQuotes(quotes);
+						return;
+					}
+					
+					const filteredQuotes = quotes.filter(quote => 
+						quote.text.toLowerCase().includes(searchTerm) || 
+						quote.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+						quote.category.toLowerCase().includes(searchTerm)
+					);
+					
+					quoteCount.textContent = `共 ${filteredQuotes.length} 条结果`;
+					renderQuotes(filteredQuotes);
+				}, 300);
+			});
+		});
+		
         // 渲染语录卡片
         function renderQuotes(quotesToRender) {
             const quotesContainer = document.querySelector('.quote-container');
