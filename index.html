@@ -565,6 +565,78 @@
             width: 100%;
             text-align: center;
         }
+		
+	    /* 反馈按钮样式 */
+	    #feedback-button {
+	        position: fixed;
+	        bottom: 30px;
+	        left: 50%;
+	        transform: translateX(-50%);
+	        background: linear-gradient(90deg, #00b084, #2196f3);
+	        color: var(--text-color);
+	        border: none;
+	        border-radius: 50px;
+	        padding: 15px 25px;
+	        font-size: 1rem;
+	        cursor: pointer;
+	        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	        display: flex;
+	        align-items: center;
+	        gap: 10px;
+	        transition: padding 0.3s ease;
+	        z-index: 100;
+	        overflow: hidden;
+	        height: 45px; /* 固定高度 */
+	        white-space: nowrap; /* 禁止文本换行 */
+	    }
+	
+	    /* 默认状态下的按钮文本 */
+	    #feedback-button .default-text {
+	        display: block;
+	        transition: all 0.3s ease;
+	    }
+	
+	    /* 悬停状态下的按钮文本 */
+	    #feedback-button .hover-text {
+	        display: none;
+	        margin-left: 20px;
+	        transition: all 0.3s ease;
+	    }
+	
+	    /* 按钮悬停效果 */
+	    #feedback-button:hover .default-text {
+	        display: none;
+	    }
+	
+	    #feedback-button:hover .hover-text {
+	        display: block;
+	        animation: slideInFromRight 0.3s ease forwards;
+	    }
+	
+	    #feedback-button:hover {
+	        padding: 15px 25px; /* 增加水平方向的padding */
+	    }
+	
+	    /* 按钮动画 */
+	    @keyframes slideInFromRight {
+	        from {
+	            margin-left: 100%;
+	            opacity: 0;
+	        }
+	        to {
+	            margin-left: 20px;
+	            opacity: 1;
+	        }
+	    }
+	
+	    /* 响应式设计 */
+	    @media (max-width: 768px) {
+	        #feedback-button {
+	            bottom: 20px;
+	            padding: 10px 15px;
+	            font-size: 0.9rem;
+	        }
+	    }
     </style>
 </head>
 <body>
@@ -649,6 +721,15 @@
     </div>
     
     <footer>
+		<!-- 反馈按钮 -->
+        <a href="./add-page/feedback.html" target="_blank" id="feedback-link">
+	        <button id="feedback-button">
+	            <i class="fas fa-comment"></i>
+	            <span class="default-text">反馈</span>
+	            <span class="hover-text">没有找到所需？点此反馈</span>
+	        </button>
+        </a>
+		
         <div class="footer-container">
             <p style="color: #808080;">王轶群老师的语言世界 | 轶说新语</p>
             <div class="social-icons">
@@ -831,6 +912,20 @@
 			renderQuotes(quotes);
 		});
         
+        // 添加反馈按钮点击事件
+        document.getElementById('feedback-button').addEventListener('click', function() {
+            // 为按钮添加点击动画
+            this.classList.add('clicked');
+            setTimeout(() => {
+                this.classList.remove('clicked');
+            }, 300);
+        });
+
+        // 添加按钮点击动画
+        document.getElementById('feedback-button').addEventListener('animationend', function() {
+            this.style.animation = 'none';
+        });
+		
         // 王轶群老师语录数据
 		const quotes = [
 			{ 
