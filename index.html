@@ -629,6 +629,24 @@
 	        }
 	    }
 	
+	    /* 添加呼吸灯效果 */
+	    #feedback-button {
+	        animation: breathing 2s infinite alternate;
+	    }
+	
+	    @keyframes breathing {
+	        0% {
+	            box-shadow: 0 0 5px rgba(0, 176, 132, 0.5),
+	                        0 0 15px rgba(0, 176, 132, 0.3),
+	                        0 0 20px rgba(0, 176, 132, 0.1);
+	        }
+	        100% {
+	            box-shadow: 0 0 15px rgba(0, 176, 132, 0.8),
+	                        0 0 25px rgba(0, 176, 132, 0.6),
+	                        0 0 40px rgba(0, 176, 132, 0.4);
+	        }
+	    }
+				
 	    /* 响应式设计 */
 	    @media (max-width: 768px) {
 	        #feedback-button {
@@ -921,10 +939,14 @@
             }, 300);
         });
 
-        // 添加按钮点击动画
-        document.getElementById('feedback-button').addEventListener('animationend', function() {
-            this.style.animation = 'none';
-        });
+	    // 添加反馈按钮点击事件
+	    document.getElementById('feedback-button').addEventListener('click', function() {
+	        // 为按钮添加点击动画
+	        this.classList.add('clicked');
+	        setTimeout(() => {
+	            this.classList.remove('clicked');
+	        }, 300);
+	    });
 		
         // 王轶群老师语录数据
 		const quotes = [
